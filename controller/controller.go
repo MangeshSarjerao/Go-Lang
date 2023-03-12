@@ -15,33 +15,35 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-const connstring = "mongodb+srv://mangesh:K1xKFhSLkL8b2kZf@cluster0.8lybpkb.mongodb.net/?retryWrites=true&w=majority"
-
+const connectionString = "mongodb://127.0.0.1:27017"
 const dbName = "netflix"
-
 const colName = "watchlist"
 
+// important stuff
 var collection *mongo.Collection
 
-// connect with data base of mongo database
+// connect with mongo database
 func init() {
 	//client options
-	clientOption := options.Client().ApplyURI(connstring)
+	clientOption := options.Client().ApplyURI(connectionString)
 
 	//conenct to mongo database
 	client, err := mongo.Connect(context.TODO(), clientOption)
+
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("Connection was successfull !")
+	fmt.Println("Mongo DB Connection was success !")
 
 	collection = client.Database(dbName).Collection(colName)
 
-	fmt.Println("collection reference is ready.")
+	//connection is ready
+	fmt.Println("connection reference is ready.")
 }
 
 // helper for Mongo DB
 func insertOneMovie(movie model.Netflix) {
+
 	inserted, err := collection.InsertOne(context.Background(), movie)
 	if err != nil {
 		log.Fatal(err)
